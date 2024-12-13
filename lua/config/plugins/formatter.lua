@@ -23,11 +23,19 @@ return {
 					prepend_args = { "--parser", "yaml" },
 				},
 			},
-			format_on_save = {
-				lsp_fallback = true,
-				async = false,
-				timeout_ms = 1000,
-			},
+			format_on_save = function(bufnr)
+				local bufname = vim.api.nvim_buf_get_name(bufnr)
+
+				-- Disable file formatting on any temporary buffer contents
+				if bufname:match("helmfile.yaml") then
+					return
+				else
+					return {
+						timeout_ms = 2500,
+						lsp_fallback = true,
+					}
+				end
+			end,
 		})
 
 		vim.keymap.set({ "n", "v" }, "<leader>f", function()

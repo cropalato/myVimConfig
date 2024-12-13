@@ -13,7 +13,7 @@ function EyamlEncrypt()
 		SHELLCMD = "eyaml encrypt -o string --stdin 2> /dev/null"
 		APPEND = ""
 	end
-	local i = string.find(TXT, "ENC[")
+	local i = string.find(TXT, "ENC%[")
 	if i ~= nil then
 		SHELLCMD = "eyaml decrypt --stdin 2> /dev/null"
 		APPEND = ""
