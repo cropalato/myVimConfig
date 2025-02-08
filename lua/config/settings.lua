@@ -31,3 +31,4 @@ o.foldexpr = "nvim_treesitter#foldexpr()"
 o.foldlevelstart = 99
 
 vim.filetype.add({ extension = { eyaml = "yaml" } })
+
