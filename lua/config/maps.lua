@@ -1,38 +1,56 @@
-vim.g.mapleader = " "
-
-local function map(mode, lhs, rhs)
-	vim.keymap.set(mode, lhs, rhs, { silent = true })
+-- maps.lua
+local function map(mode, lhs, rhs, opts)
+	local options = { silent = true, noremap = true }
+	if opts then
+		options = vim.tbl_extend("force", options, opts)
+	end
+	vim.keymap.set(mode, lhs, rhs, options)
 end
 
--- Save
-map("n", "<leader>w", "<CMD>update<CR>")
+-- Better window navigation
+map("n", "<C-h>", "<C-w>h")
+map("n", "<C-j>", "<C-w>j")
+map("n", "<C-k>", "<C-w>k")
+map("n", "<C-l>", "<C-w>l")
 
--- Quit
-map("n", "<leader>q", "<CMD>q<CR>")
+-- Resize with arrows
+map("n", "<C-Up>", ":resize -2<CR>")
+map("n", "<C-Down>", ":resize +2<CR>")
+map("n", "<C-Left>", ":vertical resize -2<CR>")
+map("n", "<C-Right>", ":vertical resize +2<CR>")
+
+-- Navigate buffers
+map("n", "<S-l>", ":bnext<CR>")
+map("n", "<S-h>", ":bprevious<CR>")
+
+-- Stay in indent mode
+map("v", "<", "<gv")
+map("v", ">", ">gv")
+
+-- Move text up and down
+map("v", "<A-j>", ":m .+1<CR>==")
+map("v", "<A-k>", ":m .-2<CR>==")
+map("v", "p", '"_dP') -- Better paste
+
+-- Save and quit
+map("n", "<leader>w", "<cmd>write<cr>")
+map("n", "<leader>q", "<cmd>quit<cr>")
 
 -- Exit insert mode
 map("i", "jk", "<ESC>")
+map("i", "kj", "<ESC>")
 
 -- NeoTree
-map("n", "<leader>e", "<CMD>Neotree toggle<CR>")
-map("n", "<leader>r", "<CMD>Neotree focus<CR>")
+map("n", "<leader>e", "<cmd>Neotree toggle<cr>")
+map("n", "<leader>r", "<cmd>Neotree focus<cr>")
 
--- New Windows
-map("n", "<leader>o", "<CMD>vsplit<CR>")
-map("n", "<leader>p", "<CMD>split<CR>")
+-- Split windows
+map("n", "<leader>sv", "<cmd>vsplit<cr>")
+map("n", "<leader>sh", "<cmd>split<cr>")
 
--- Window Navigation
-map("n", "<C-h>", "<C-w>h")
-map("n", "<C-l>", "<C-w>l")
-map("n", "<C-k>", "<C-w>k")
-map("n", "<C-j>", "<C-w>j")
+-- Clear highlights
+map("n", "<leader>h", "<cmd>nohlsearch<cr>")
 
--- Resize Windows
-map("n", "<C-Left>", "<C-w><")
-map("n", "<C-Right>", "<C-w>>")
-map("n", "<C-Up>", "<C-w>+")
-map("n", "<C-Down>", "<C-w>-")
-
--- Map it to a visual mode key combination, e.g., <leader>y
-vim.api.nvim_set_keymap("v", "\\e", ":lua EyamlEncrypt()<CR>", { noremap = true, silent = true })
-vim.api.nvim_set_keymap("n", "\\m", ":lua GenCommitMsg()<CR>", { noremap = true, silent = true })
+-- Custom functions
+map("v", "\\e", ":lua EyamlEncrypt()<CR>")
+map("n", "\\m", ":lua GenCommitMsg()<CR>")
