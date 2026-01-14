@@ -1,20 +1,8 @@
+-- Treesitter configuration (extends LazyVim defaults)
 return {
-	"nvim-treesitter/nvim-treesitter",
-	event = { "BufReadPost", "BufNewFile" },
-	build = ":TSUpdate",
-	dependencies = {
-		"nvim-treesitter/nvim-treesitter-textobjects",
-		"windwp/nvim-ts-autotag",
-		"JoosepAlviste/nvim-ts-context-commentstring",
-	},
-	config = function()
-		require("nvim-treesitter.configs").setup({
-			highlight = {
-				enable = true,
-				additional_vim_regex_highlighting = false,
-			},
-			indent = { enable = true },
-			autotag = { enable = true },
+	{
+		"nvim-treesitter/nvim-treesitter",
+		opts = {
 			ensure_installed = {
 				"bash",
 				"c",
@@ -36,8 +24,6 @@ return {
 				"vim",
 				"yaml",
 			},
-			sync_install = false,
-			auto_install = true,
 			incremental_selection = {
 				enable = true,
 				keymaps = {
@@ -47,6 +33,11 @@ return {
 					node_decremental = "<M-space>",
 				},
 			},
+		},
+	},
+	{
+		"nvim-treesitter/nvim-treesitter-textobjects",
+		opts = {
 			textobjects = {
 				select = {
 					enable = true,
@@ -79,28 +70,6 @@ return {
 					},
 				},
 			},
-			context_commentstring = {
-				enable = true,
-				enable_autocmd = false,
-			},
-		})
-
-		-- Folding configuration
-		vim.opt.foldmethod = "expr"
-		vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
-		vim.opt.foldenable = true
-		vim.opt.foldlevel = 99
-		vim.opt.foldlevelstart = 99
-
-		-- Create autocommand for better fold handling
-		vim.api.nvim_create_autocmd("BufReadPost", {
-			pattern = "*",
-			callback = function()
-				vim.cmd([[
-          normal! zx
-          normal! zR
-        ]])
-			end,
-		})
-	end,
+		},
+	},
 }

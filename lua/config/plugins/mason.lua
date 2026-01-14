@@ -1,59 +1,30 @@
+-- Custom YAML LSP configuration with schema mappings
+-- Language servers and formatters are handled by LazyVim extras
 return {
-	"williamboman/mason.nvim",
+	"neovim/nvim-lspconfig",
 	opts = {
-		ensure_installed = {
-			"black",
-			"debugpy",
-			"mypy",
-			"ruff",
-			"pyright",
-		},
-	},
-	dependencies = {
-		"williamboman/mason-lspconfig.nvim",
-		"WhoIsSethDaniel/mason-tool-installer.nvim",
-	},
-	config = function()
-		require("mason").setup()
-
-		require("mason-lspconfig").setup({
-			automatic_installation = true,
-			ensure_installed = {
-				"cssls",
-				"eslint",
-				"html",
-				"jsonls",
-				"ts_ls",
-				"pyright",
-				"tailwindcss",
-			},
-		})
-
-		require("lspconfig").pyright.setup({
-			settings = {
-				pyright = {
-					-- Using Ruff's import organizer
-					disableOrganizeImports = true,
-				},
-				python = {
-					analysis = {
-						-- Ignore all files for analysis to exclusively use Ruff for linting
-						ignore = { "*" },
+		servers = {
+			yamlls = {
+				settings = {
+					yaml = {
+						format = {
+							bracketSpacing = false,
+						},
+						schemaStore = {
+							enable = true,
+							url = "https://www.schemastore.org/api/json/catalog.json",
+						},
+						schemas = {
+							["https://gitlab.com/gitlab-org/gitlab/-/raw/master/app/assets/javascripts/editor/schema/ci.json"] = ".gitlab-ci.{yml,yaml}",
+							["http://json.schemastore.org/chart"] = "Chart.yaml",
+							["http://json.schemastore.org/prettierrc"] = ".prettierrc.{yml,yaml}",
+							["http://json.schemastore.org/helmfile"] = "helmfile.yaml",
+						},
+						validate = true,
+						hover = true,
 					},
 				},
 			},
-		})
-		require("lspconfig").ruff.setup({})
-
-		require("mason-tool-installer").setup({
-			ensure_installed = {
-				"prettier",
-				"stylua", -- lua formatter
-				"isort", -- python formatter
-				"black", -- python formatter
-				"pylint",
-				"eslint_d",
-			},
-		})
-	end,
+		},
+	},
 }
